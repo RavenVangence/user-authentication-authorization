@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const Schema = mongoose.Schema;
 
 const userSchema = Schema({
@@ -46,30 +48,41 @@ const userSchema = Schema({
 })
 
 
-// Login method 
+// // Login method 
 
-userSchema.statics.login = async function ({usernameID, password}) {
+// userSchema.statics.login = async function ({usernameID, password}) {
     
-    const user = await this.findOne({usernameID});
+//     const user = await this.findOne({usernameID});
 
-    if (user) {
-        // Load hash from password DB.
-        bcrypt.compare(password , hash, function(err, res) {
-            if (res === true) {
+//     if (!user) {
+//         throw Error('UsernameID not found!');
+//     }
 
-                console.log( user._id ); 
-                const token = jwt.sign( user, process.env.JWT_PRIVATE_KEY);
-                user.refreshToken = token;
-            }
-            if (err) {
-                
-                throw Error('Passwords incorrect!')
-            }
-        }); 
-    }
-    throw Error('UsernameID not found!');
-    
-}
+//     if (user) {
+
+//         // Compare given password to hashed password in database
+//         bcrypt.compare(password , user.password, function (error , res) {
+            
+//             if (res === true)   { // If passwords match
+
+//                 jwt.sign( {user}, process.env.JWT_PRIVATE_KEY, function (err, token) {
+
+//                     this.refreshToken = token;
+
+//                     if (err) {
+//                         return err;
+//                     }
+//                     return {user};
+//                 });
+//             }
+
+//             else {          // If passwords do not match
+//                 console.log(2);
+//                 throw Error('Password incorrect!')
+//             }
+//         }); 
+//     }
+// }
 
 
 module.exports = mongoose.model('User', userSchema)
