@@ -2,8 +2,8 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const router = express.Router();
+const Post = require('../model/post-schema.js')
 const User = require('../model/user-schema.js');
-const { authorizeToken } = require('../controllers/authorize-token.js');
 
 
 router.post('/create-user', async (req, res) => {
@@ -19,7 +19,7 @@ router.post('/create-user', async (req, res) => {
         return;
 
     } else {
-        const hash = await bcrypt.hash(password, 10);
+        const hash = await bcrypt.hash(password, 15);
 
         const user = await User.create(
             { 
@@ -31,7 +31,7 @@ router.post('/create-user', async (req, res) => {
                 email,
             });         
         if (user) {
-                const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY);
+                const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1minute'});
 
                 await User.findByIdAndUpdate(user._id, {refreshToken: token});
         }
@@ -66,8 +66,12 @@ router.post('/login', async (req, res) => {
             if (doPasswordsMatch) {
                 // create new token
                 const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1day'});
-                user.refreshToken = token;
-                res.status(200).json({message: 'User successfully logged in'})
+                
+                // find user in db and update refresh token;
+                const userID = user._id;
+                await User.findByIdAndUpdate(userID, {refreshToken: token});
+
+                res.status(200).json({message: 'User successfully logged in'});
             }
             
             // if password is incorrect
@@ -86,5 +90,22 @@ router.post('/login', async (req, res) => {
     res.end();
     
 })
+
+router.get('/logout', async (req, res) => {
+
+    //grabs the token from bearer authorization
+    const refreshToken = req.headers.authorization.split(' ')[1];
+    
+    try {
+
+        //removes the token from db but does not invalidate it.
+        await User.findOneAndUpdate({refreshToken}, {refreshToken: ''})
+
+    } catch (error) {
+        res.json({message: error})
+    }
+    res.end();
+})
+
 
 module.exports = router;

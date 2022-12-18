@@ -1,19 +1,21 @@
 require('dotenv').config();
-const bcrypt = require('bcrypt');
 const express  = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser')
 const app = express();
 const connectDB = require('./config/db-connect.js');
+
 //ROUTES
 const userRoute = require('./routes/user-route.js');
+const postRoute = require('./routes/post-route.js');
 
 //APP DOT USE CASES
 app.use(express.json());
 app.use(cors());
 app.use(cookieParser())
 app.use('/user', userRoute);
+app.use('/user/post-api', postRoute)
 
 try {
     connectDB();
