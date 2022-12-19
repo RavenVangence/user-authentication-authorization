@@ -1,0 +1,12 @@
+#root{
+  --main-font : font-family: 'Poppins', sans-serif;
+  --logo-font : font-family: 'Rubik 80s Fade', cursive;
+}
+
+*{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+
