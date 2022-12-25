@@ -1,7 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import dataReducer from '../controllers/data-slice.js'
 
-const store = configureStore({
-  reducer: {data: dataReducer,}
+export const store = configureStore({
+  reducer: {
+    data: dataReducer
+  },
+  //  middleware: getDefaultMiddleware =>
+  //   getDefaultMiddleware({
+  //     serializableCheck: false,
+  //   }),
 })
-export default store;

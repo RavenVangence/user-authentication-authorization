@@ -1,13 +1,24 @@
 #root{
   --main-font : 'Poppins', sans-serif;
   --logo-font : 'Rubik 80s Fade', cursive;
-}
+  --light-green: #54B435;
+  --bluegray: #344D67;
+  --dark-green: #379237;
+  --line: #82CD47;
+  --yellow: #F0FF42;
 
+  width: 70%;
+  /* height: 100%;  */
+  margin: 0 auto
+}
+body {
+  background-color:#344D67;
+}
 *{
   box-sizing: border-box;
-  margin: 0 auto;
+  margin: 0;
   padding: 0;
   font-family: var(--main-font);
 }
-
 @import './navbar.css';
+@import './home.css'

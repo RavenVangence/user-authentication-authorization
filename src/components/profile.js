@@ -1,9 +1,9 @@
 import React from 'react'
 
-function Posts() {
+function Profile() {
   return (
     <div>Posts</div>
   )
 }
 
-export default Posts;
+export default Profile;
