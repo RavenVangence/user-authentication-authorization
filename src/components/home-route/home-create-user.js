@@ -1,20 +1,40 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormData, submitCreateUserForm } from '../controllers/data-slice';
+import { setFormData, setErrorOff, postData} from '../../controllers/data-slice';
+import { useNavigate } from "react-router-dom";
+import {TiTick} from 'react-icons/ti';
 
-function Home() {
+function HomeCreateUser() {
   const dispatch = useDispatch();
-  const {userLogState, formData} = useSelector(store => store.data);
+  const {isLoading, formData, formError, isUserCreated} = useSelector(store => store.data);
+  
+  useEffect(() => {
+    if (formError[0] === true) {
+      setTimeout(() => {
+        dispatch(setErrorOff())
+      }, 5000);
+    }
+  })
 
-  return <main className='main-home-container'>
-    {
-      userLogState ? 
+  return <main className='main-create-container'>
+    { isLoading ?
+       <div className='home-loader-container'>
+        <div id='home-loader'>
+
+        </div>
+
+        <h3>Please Wait . . .</h3>
+       </div>
       
-      <section className='create-user'>
+
+      : 
+      
+      isUserCreated.status ?  <HomeModal/> : <section className='create-user'>
       <div>
         <h3>Create An Auth App Account</h3>
         <p>Do not share your real info, this is a portfolio site</p>
+      {formError[0] && <p className='form-error'>{formError[1]}</p>}
       </div>
       <form>
         <div className='form-control'>
@@ -42,7 +62,7 @@ function Home() {
             id="email" 
             required={true}
             value={formData.email}
-             onChange={(e) => dispatch(setFormData({ name: e.target.name, value: e.target.value}))} />
+            onChange={(e) => dispatch(setFormData({ name: e.target.name, value: e.target.value}))} />
           <label htmlFor="email">Email</label>
         </div>
         <div className='form-control'>
@@ -74,35 +94,38 @@ function Home() {
         </div>
       </form>
       
-      <button className='create-user-submit-btn' onClick={() => dispatch(submitCreateUserForm())}>
+      <button 
+        className='create-user-submit-btn' 
+        onClick={() => {
+        dispatch(postData())
+        dispatch(setErrorOff())
+        }}>
           <h3>Create Profile</h3>
         </button>
-      </section>
-    
-      :
+
+       
+      </section>}
       
-      <section className='login-user'>
-      <div>
-        <h3>Login To Your Auth App Account</h3>
-        <p>Do not share your real info, this is a portfolio site</p>
-      </div>
-      <form action="" method="post" className='login-user-form'>
-        <div className='form-control'>
-          <input type="text" name='usernameID' required={true}/>
-          <label htmlFor="usernameID">@UsernameID Or Email</label>
-        </div>
-        <div className='form-control'>
-          <input type="password" name='password'  required={true}/>
-          <label htmlFor="password">Password</label>
-        </div>
-      </form>
-      
-      <button className='login-user-submit-btn'>
-          <h3>Login</h3>
-        </button>
-    </section>
-    }
   </main>
 }
 
-export default Home;
+
+const HomeModal = () => {
+  const navigate = useNavigate();
+  const {isUserCreated} = useSelector(store => store.data);
+
+  return <>
+    <div className='home-modal-container'>
+      <h3>Your account has been successfully been created</h3>
+      <TiTick id='tick'></TiTick>
+      <h4>Redirecting to your profile</h4>
+      <div id='home-modal-loader'></div>
+    </div>
+    {
+      useEffect(() => {
+        isUserCreated.status && navigate('/profile')
+      },[])
+    }
+  </>
+}
+export default HomeCreateUser;

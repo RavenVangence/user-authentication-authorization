@@ -11,7 +11,9 @@ import { Provider } from 'react-redux';
 import { store } from '../config/store';
 //Components
 import Navbar from './navbar';
-import Home from './home.js';
+import HomeMain from './home-route/home-main.js';
+import HomeCreateUser from './home-route/home-create-user.js';
+import HomeLogin from './home-route/home-login.js';
 import Profile from './profile.js';
 import Error from './error.js';
 
@@ -23,7 +25,10 @@ function App() {
 
         <Routes>
 
-          <Route path='/' element={<Home/>}>
+          <Route path='/' >
+            <Route index={true} element={<HomeMain/>}></Route>
+            <Route path='create-user' element={<HomeCreateUser/>}></Route>
+            <Route path='login-user' element={<HomeLogin/>}></Route>
           </Route>
 
           <Route path='/profile' element={<Profile/>}>

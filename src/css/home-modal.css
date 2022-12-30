@@ -1,0 +1,29 @@
+.home-modal-container {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    top: 10rem;
+    width: 70%;
+    height: 15rem;
+}
+#home-modal-loader {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 2.5rem;
+    border: 5px solid;
+    border-color: black transparent black transparent;
+    border-radius: 50%;
+    animation: rotate 1.5s linear;
+    animation-iteration-count: infinite;
+}
+@keyframes rotate {
+    to{
+        transform: rotate(360deg);
+    }
+}
+#tick {
+    width: 5rem;
+    height: 5rem;
+}

@@ -6,6 +6,7 @@
   --dark-green: #379237;
   --line: #82CD47;
   --yellow: #F0FF42;
+  --red: #ED4337;
 
   width: 70%;
   /* height: 100%;  */
@@ -21,4 +22,7 @@ body {
   font-family: var(--main-font);
 }
 @import './navbar.css';
-@import './home.css'
+@import './home.css';
+@import './home-create-user.css';
+@import './home-login.css';
+@import './home-modal.css';
