@@ -1,9 +1,14 @@
 import { configureStore } from '@reduxjs/toolkit'
-import dataReducer from '../controllers/data-slice.js'
+
+import createUserDataReducer from '../controllers/create-user-data-slice.js';
+import loginUserDataReducer from '../controllers/login-data-slice.js';
+import profileDataReducer from '../controllers/profile-data-slice'
 
 export const store = configureStore({
   reducer: {
-    data: dataReducer
+    createUserSlice: createUserDataReducer,
+    loginSlice: loginUserDataReducer,
+    profileSlice: profileDataReducer
   },
   //  middleware: getDefaultMiddleware =>
   //   getDefaultMiddleware({

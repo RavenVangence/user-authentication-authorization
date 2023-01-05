@@ -1,0 +1,25 @@
+.main-profile-container {
+    position: absolute;
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    width: 70%;
+    top: 7.5rem;
+}
+.aside-user-container {
+    grid-column-start: 2;
+    grid-column-end: 3;
+
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#user-circle-icon {
+    width: 5rem;
+    height: 5rem;
+}
+.username-container, .bio-container {
+    align-self: flex-start;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}

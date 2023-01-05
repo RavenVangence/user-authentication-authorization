@@ -1,3 +1,34 @@
+.home-main-container {
+    position: absolute;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 70%;
+    top: 10rem;
+}
+.home-main-container > h2 ~ p {
+    text-align: justify;
+    font-size: 1rem;
+    font-weight: 500;
+    width: 50%;
+    margin-top: 2.5rem;
+}
+.home-buttons {
+    width: 10rem;
+    height: 3rem;
+    margin-top: 2.5rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+    background-color: transparent;
+    border: 1.8px solid #000;
+    transition: .3s;
+}
+.home-buttons:hover {
+    color: rgb(84, 180, 53);
+    border: 1.8px solid rgb(84, 180, 53);
+}
 .form-error {
     color: var(--yellow);
     margin-top: .75rem;

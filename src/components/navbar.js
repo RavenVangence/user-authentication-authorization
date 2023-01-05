@@ -1,10 +1,10 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import {setUserLoggedIn}  from '../controllers/data-slice.js';
+import {setUserLoggedIn}  from '../controllers/create-user-data-slice.js';
 
 function Navbar() {
   const dispatch = useDispatch();
-  const {userLogState}  = useSelector((store) => store.data)
+  const {userLogState}  = useSelector((store) => store.createUserSlice)
 
 
   return <>
@@ -16,11 +16,11 @@ function Navbar() {
     <div className='log-container'>
       { userLogState ?
       <button className='log-container-item' onClick={() => dispatch(setUserLoggedIn())}>
-        <h3>Logout</h3>
+        <h3>Log Out</h3>
       </button>
       :
       <button className='log-container-item' onClick={() => dispatch(setUserLoggedIn())}>
-        <h3>Sign Up</h3>
+        <h3>Home</h3>
       </button>
       }
     </div>

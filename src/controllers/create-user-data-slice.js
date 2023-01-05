@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+
 import axios from 'axios';
-import { redirect } from "react-router-dom"
 
 export const postData = createAsyncThunk('postFormData', 
   async (_,thunkAPI) => {
-    const {formData} = thunkAPI.getState().data;
+    const {formData} = thunkAPI.getState().createUserSlice;
 
 
     const validateEmail = (email) => {
@@ -39,13 +39,14 @@ export const postData = createAsyncThunk('postFormData',
         url: 'http://localhost:8000/user/create-user',
         data: {
           ...formData
-        }
+        },
+        withCredentials: true,
       }
       );
-
+      
       return res.data;
     } catch (error) {
-      return  thunkAPI.rejectWithValue(error.message);
+      return  thunkAPI.rejectWithValue(error.response.data.error);
     }
   } )
   
@@ -60,9 +61,11 @@ const initialState = {
     formError: [false,''],
     isLoading: false,
     isUserCreated: {status: false, message: ''},
+    isSubmitComplete: false,
+    userData: {},
 }
 const dataSlice = createSlice({
-  name: 'data',
+  name: 'createUserSlice',
   initialState,
   reducers: {
     setFormData: (state, action) => {
@@ -74,6 +77,15 @@ const dataSlice = createSlice({
     setErrorOff: (state) => {
         state.formError[0] = false;
         state.formError[1] = '';
+    },
+    setIsUserCreatedOff: (state) => {
+      state.isUserCreated.status = false;
+    },
+    setIsUserCreatedOn: (state) => {
+      state.isUserCreated.status = true;
+    },
+    setIsSubmitComplete: (state) => {
+      state.isSubmitComplete = true;
     }
   },
   extraReducers: (builder) => {
@@ -81,9 +93,12 @@ const dataSlice = createSlice({
       state.isLoading = true;
     })
     builder.addCase(postData.fulfilled, (state, action) => {
+      const {userID} = action.payload;
+      state.isSubmitComplete = true;
       state.isLoading = false;
-      state.isUserCreated.status = true;
+      state.userData = {userID};
       state.isUserCreated.message = action.payload.message;
+
       state.formData = {
         firstname: '',
         lastname: '',
@@ -91,14 +106,15 @@ const dataSlice = createSlice({
         username: '',
         usernameID: '',
         password: '' }
-      redirect('/profile');
+      
     })
     builder.addCase(postData.rejected, (state, action) => {
+
       state.isLoading = false;
+      state.submitComplete = true;
       const error = action.payload;
       state.formError[0] = true;
       state.formError[1] = error;
-      redirect('/create-user');
     })
   }
 })
@@ -106,6 +122,6 @@ const dataSlice = createSlice({
 // Extract the action creators object and the reducer
 const { actions, reducer } = dataSlice;
 // Extract and export each action creator by name
-export const { setUserLoggedIn, setFormData, setErrorOff, submitCreateUserForm} = actions;
+export const { setUserLoggedIn, setFormData, setErrorOff, submitCreateUserForm, setIsUserCreatedOff, setIsUserCreatedOn, setIsSubmitComplete} = actions;
 // Export the reducer, either as a default or named export
 export default reducer;

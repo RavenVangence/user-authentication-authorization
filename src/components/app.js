@@ -16,6 +16,7 @@ import HomeCreateUser from './home-route/home-create-user.js';
 import HomeLogin from './home-route/home-login.js';
 import Profile from './profile.js';
 import Error from './error.js';
+import UserProfile from './user-profile';
 
 function App() {
   return <>
@@ -26,12 +27,13 @@ function App() {
         <Routes>
 
           <Route path='/' >
-            <Route index={true} element={<HomeMain/>}></Route>
-            <Route path='create-user' element={<HomeCreateUser/>}></Route>
-            <Route path='login-user' element={<HomeLogin/>}></Route>
+            <Route index={true} element={<HomeMain/>} />
+            <Route path='create-user' element={<HomeCreateUser/>} />
+            <Route path='login-user' element={<HomeLogin/>} />
           </Route>
 
-          <Route path='/profile' element={<Profile/>}>
+          <Route path='/locked-routes' element={<Profile/>}>
+            <Route path='profile' element={<UserProfile/>}/>
           </Route>
 
           <Route path='*' element={<Error/>}>

@@ -1,21 +1,24 @@
 import React, { useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormData, setErrorOff, postData} from '../../controllers/data-slice';
+import { setFormData, setErrorOff, postData} from '../../controllers/create-user-data-slice';
 import { useNavigate } from "react-router-dom";
 import {TiTick} from 'react-icons/ti';
-
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { setUser } from '../../controllers/profile-data-slice';
+import { setIsSubmitComplete, setIsUserCreatedOff, setIsUserCreatedOn } from '../../controllers/create-user-data-slice';
 function HomeCreateUser() {
   const dispatch = useDispatch();
-  const {isLoading, formData, formError, isUserCreated} = useSelector(store => store.data);
+  const {isLoading, formData, formError, isSubmitComplete} = useSelector(store => store.createUserSlice);
   
   useEffect(() => {
     if (formError[0] === true) {
       setTimeout(() => {
         dispatch(setErrorOff())
-      }, 5000);
+      }, 10000);
     }
-  })
+  },[])
 
   return <main className='main-create-container'>
     { isLoading ?
@@ -30,7 +33,7 @@ function HomeCreateUser() {
 
       : 
       
-      isUserCreated.status ?  <HomeModal/> : <section className='create-user'>
+      isSubmitComplete ?  <HomeModal/> : <section className='create-user'>
       <div>
         <h3>Create An Auth App Account</h3>
         <p>Do not share your real info, this is a portfolio site</p>
@@ -103,7 +106,7 @@ function HomeCreateUser() {
           <h3>Create Profile</h3>
         </button>
 
-       
+
       </section>}
       
   </main>
@@ -111,8 +114,64 @@ function HomeCreateUser() {
 
 
 const HomeModal = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {isUserCreated} = useSelector(store => store.data);
+  const {userData, isUserCreated, isSubmitComplete} = useSelector(store => store.createUserSlice)
+
+  
+  const SESSION_CREATE_ID = Cookies.get('SESSION_CREATE_ID');
+  //init func to get user's inf
+  const getUsersInfo = async () => {
+    //destructure user id from userDat in CreateUserSlice
+    const {userID} = userData;
+    dispatch(setIsSubmitComplete());
+
+    try {
+      //await for response
+      let res;
+      //check if userId is available
+      if (userID) {
+        res = await axios.get(`http://localhost:8000/profile/${userID}`,
+        {
+          withCredentials: true
+        })
+      } 
+      if(!userID && SESSION_CREATE_ID){
+        res = await axios.get(`http://localhost:8000/profile/${SESSION_CREATE_ID}`,
+        {
+          withCredentials: true
+        });
+      }
+
+      
+      if (!userID && !SESSION_CREATE_ID) {
+        throw new Error('Unauthorized!');
+      }
+      dispatch(setIsUserCreatedOn());
+      //set user in profileSlice
+      dispatch(setUser(res.data));
+      return 'complete';
+    } catch (error) {
+      return error;
+    }
+  }
+  
+  
+  
+
+  useEffect(() => {
+    const test = async () => {
+      const isComplete = await getUsersInfo();
+    
+        if (isComplete === 'complete') {
+          console.log(1);
+          navigate('/locked-routes/profile');
+        }
+    }
+    test()
+  },[])
+
+  
 
   return <>
     <div className='home-modal-container'>
@@ -121,11 +180,6 @@ const HomeModal = () => {
       <h4>Redirecting to your profile</h4>
       <div id='home-modal-loader'></div>
     </div>
-    {
-      useEffect(() => {
-        isUserCreated.status && navigate('/profile')
-      },[])
-    }
   </>
 }
 export default HomeCreateUser;

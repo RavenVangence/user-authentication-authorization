@@ -19,6 +19,7 @@
     align-items: center;
 }
 .create-user-submit-btn {
+    border-radius: 5px;
     width: 18rem;
     height: 3rem;
     position: absolute;
