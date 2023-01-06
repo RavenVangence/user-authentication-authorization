@@ -2,15 +2,13 @@ const jwt = require('jsonwebtoken');
 
 const authorizeToken = (req, res, next) => {
     
-    const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if(token == null) {
+    const {auth_token} = req.cookies;
+    if(!auth_token) {
         return res.sendStatus(401);
     }
-    jwt.verify(token, process.env.JWT_PRIVATE_KEY, (error, user) => {
+    jwt.verify(auth_token, process.env.JWT_PRIVATE_KEY, (error, user) => {
         if(error) {
-            return res.sendStatus(403);
+            return res.sendStatus(400);
         }
         req.user = user;
         next();

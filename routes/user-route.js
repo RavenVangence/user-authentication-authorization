@@ -2,25 +2,24 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const router = express.Router();
-const Post = require('../model/post-schema.js')
 const User = require('../model/user-schema.js');
 
 
 router.post('/create-user', async (req, res) => {
-
+    //data deconstruction
     const {username, firstname, lastname , password, usernameID, email} = req.body;
+    
+    try {
+        //check if usernameID provided is already taken 
+        const isUsernameIDAvail = await User.exists({ usernameID })
+        //if usernameID is already taken
+        if (isUsernameIDAvail) {
+            throw new Error(`@usernameID already taken`);
+        }
 
-    const isUsernameIDAvail = await User.exists({ usernameID })
-
-    if (isUsernameIDAvail) {
-
-        res.json({message: `${usernameID} already taken`});
-        res.end();
-        return;
-
-    } else {
+        //await to hash password
         const hash = await bcrypt.hash(password, 15);
-
+        //create and store user in db
         const user = await User.create(
             { 
                 username,
@@ -29,63 +28,63 @@ router.post('/create-user', async (req, res) => {
                 lastname,
                 usernameID,
                 email,
-            });         
+            });
+        const userID = user.usernameID;
         if (user) {
-                const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1minute'});
-
-                await User.findByIdAndUpdate(user._id, {refreshToken: token});
+            //sign token
+            const token =  jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '2h'});
+            //send cookie encased token to front-end
+            res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2});
+            res.cookie('SESSION_CREATE_ID', userID);
+            res.status(201).json({message: `User ${username} successfully created!`, userID})
         }
+    } catch (error) {
+        res.status(400).json({error: error.message})
     }
-    res.status(201).json({message: `User ${username} successfully created!`})
     res.end();
-                    
 });
 
 router.post('/login', async (req, res) => {
-
+    //data desconstruction
     const {usernameID, password} = req.body;
-
 
     try {
 
         // check for user in database
         const user = await User.findOne({usernameID});
-        
         // if user is not in the database throw an error
         if (!user) {
             throw Error('UsernameID not registered!');
         }
-
+        
         //if user is available
         if (user) {
-
+            
             // check if password is true.
             const doPasswordsMatch = await bcrypt.compare(password, user.password);
-
+            
             // if password is correct
             if (doPasswordsMatch) {
-                // create new token
-                const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '1day'});
-                
-                // find user in db and update refresh token;
-                const userID = user._id;
-                await User.findByIdAndUpdate(userID, {refreshToken: token});
+                const userID = user.usernameID;
 
-                res.status(200).json({message: 'User successfully logged in'});
+                // create new token
+                const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '2h'});
+                res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2});
+                res.cookie('SESSION_LOGIN_ID', userID);
+                res.status(200).json({message: 'User successfully logged in', userID});
             }
             
             // if password is incorrect
             if (!doPasswordsMatch) {
-                throw Error('Password Incorrect!');
+                throw new Error('Password Incorrect!');
             }
 
         }
 
     } catch (error) {
-        
-        console.log(error.message);
-        
-        res.status(400).json({message: error.message})
+        //send back error response tp front-end
+
+        res.status(400).json({error: error.message})
     }
     res.end();
     
@@ -102,7 +101,7 @@ router.get('/logout', async (req, res) => {
         await User.findOneAndUpdate({refreshToken}, {refreshToken: ''})
 
     } catch (error) {
-        res.json({message: error})
+        res.status(400).json({error: error.message})
     }
     res.end();
 })
