@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { setLoginFormData , submitLoginForm, setLoginErrorOff, setIsUserLoggedInOff, setIsUserLoggedInOn, setIsLoginSubmitComplete} from '../../controllers/login-data-slice';
 import { TiTick } from 'react-icons/ti';
-import { setUser } from '../../controllers/profile-data-slice';
+import { setUser, setUserPosts } from '../../controllers/profile-data-slice';
 function HomeLogin() {
   const dispatch = useDispatch();
   const navigate = useNavigate()
@@ -75,7 +75,6 @@ const LoginModal = () => {
 //get userID from session cookie
  
   const SESSION_LOGIN_ID = Cookies.get('SESSION_LOGIN_ID');
-  console.log(SESSION_LOGIN_ID);
   //init func to get user's info
   const getUsersLoginInfo = async () => {
     
@@ -98,7 +97,13 @@ const LoginModal = () => {
           withCredentials: true
         });
       }
-
+      if (userID || SESSION_LOGIN_ID) {
+        const response = await axios.get(`http://localhost:8000/user/post-api/my-posts`,
+        {
+          withCredentials: true
+        });
+        dispatch(setUserPosts(response.data))
+      }
       dispatch(setIsUserLoggedInOn());
 
       if (!userID && !SESSION_LOGIN_ID) {
@@ -117,7 +122,6 @@ useEffect(() => {
       const isComplete = await getUsersLoginInfo();
     
         if (isComplete === 'login-complete') {
-          console.log(0);
           navigate('/locked-routes/profile');
         }
     }

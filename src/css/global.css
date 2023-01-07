@@ -21,6 +21,23 @@ body {
   padding: 0;
   font-family: var(--main-font);
 }
+.hold {
+  color: var(--yellow);
+}
+.hold:hover {
+  color: var(--yellow);
+}
+.hold::after {
+  content: "";
+  background-color: var(--yellow)!important;
+  color: var(--yellow)!important;
+}
+.hold::before {
+  content: "";
+  background-color: var(--yellow)!important;
+  color: var(--yellow)!important;
+}
+
 @import './navbar.css';
 @import './home.css';
 @import './home-create-user.css';

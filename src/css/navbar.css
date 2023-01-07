@@ -28,10 +28,10 @@
     height: 100%;
     background-color: transparent;
     border: none;
-    border-bottom: 1.8px solid #000;
+    border-right: 1.8px solid #000;
     transition: .3s;
 }
 .log-container-item:hover {
     color: rgba(84, 180, 53, 9);
-    border-bottom: 1.8px solid rgba(84, 180, 53, 9);
+    border-right: 1.8px solid rgba(84, 180, 53, 9);
 }

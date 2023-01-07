@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const submitLoginForm = createAsyncThunk('postLoginForm', 
-    async(_,thunkAPI) => {
+    async(_,thunkAPI, ) => {
+        const {rejectWithValue, fulfillWithValue} = thunkAPI;
         const {loginFormData} = thunkAPI.getState().loginSlice;
 
         //check if object is empty
@@ -31,10 +32,16 @@ export const submitLoginForm = createAsyncThunk('postLoginForm',
                 },
                 withCredentials: true,
             })
-            return res.data;
-
+            return fulfillWithValue(res.data);
         } catch (error) {
-            return  thunkAPI.rejectWithValue(error.response.data.error);
+            console.log(error.message);
+            if (error.message === 'Request failed with status code 400') {
+                return  rejectWithValue(error.response.data.error);
+            }
+            if (error.message === 'usernameID can not be empty.' || 'password can not be empty.') {
+                return  rejectWithValue(error.message);
+            }
+            
         }
         
     }

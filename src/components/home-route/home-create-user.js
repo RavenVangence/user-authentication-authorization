@@ -16,7 +16,7 @@ function HomeCreateUser() {
     if (formError[0] === true) {
       setTimeout(() => {
         dispatch(setErrorOff())
-      }, 10000);
+      }, 15000);
     }
   },[])
 

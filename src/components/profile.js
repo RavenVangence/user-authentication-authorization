@@ -11,7 +11,6 @@ const Profile = () => {
   const {isUserCreated} = useSelector(store => store.createUserSlice);
   const {isUserLoggedIn} = useSelector(store => store.loginSlice);
 
-  console.log(0);
   if (isUserCreated.status === true) {
     return <Outlet/>;
   } 
