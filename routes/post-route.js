@@ -10,10 +10,9 @@ router.get('/my-posts', authorizeToken, async (req, res) => {
 
     //populating posts that the user has
     const usersPosts = await User.findById({_id: user._id}).populate('posts');
-
     // if user has posts, send them to front-end
     if (usersPosts) {
-        res.json(usersPosts);
+        res.json({posts: usersPosts.posts});
     } else {
         res.json({message: 'User has not yet posted'})
     }
@@ -40,9 +39,12 @@ router.post('/create-post', authorizeToken, async (req, res) => {
         const post = await Posts.create({message, author: user._id});
         //await to push the posts id to users post array
         await User.findByIdAndUpdate({_id: user._id}, {$push: { posts: post._id }})
+        //populating posts that the user has
+        const usersPosts = await User.findById({_id: user._id}).populate('posts');
+        //get users posts
+        const posts = usersPosts.posts;
         //send back response to user
-        res.json({message: 'post successfully created'})
-
+        res.json({message: 'post successfully created', posts});
     } catch (error) {
         res.sendStatus(500);
     }

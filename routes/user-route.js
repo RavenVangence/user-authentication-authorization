@@ -47,7 +47,6 @@ router.post('/create-user', async (req, res) => {
 router.post('/login', async (req, res) => {
     //data desconstruction
     const {usernameID, password} = req.body;
-
     try {
 
         // check for user in database
@@ -88,22 +87,6 @@ router.post('/login', async (req, res) => {
     }
     res.end();
     
-})
-
-router.get('/logout', async (req, res) => {
-
-    //grabs the token from bearer authorization
-    const refreshToken = req.headers.authorization.split(' ')[1];
-    
-    try {
-
-        //removes the token from db but does not invalidate it.
-        await User.findOneAndUpdate({refreshToken}, {refreshToken: ''})
-
-    } catch (error) {
-        res.status(400).json({error: error.message})
-    }
-    res.end();
 })
 
 
