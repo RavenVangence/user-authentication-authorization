@@ -35,7 +35,6 @@ export const submitPost = createAsyncThunk('submitPost',
             });
             return fulfillWithValue(res.data);
         } catch (error) {
-            console.log(error.message);
             if (error.message === 'Request failed with status code 400') {
                 return  rejectWithValue(error.response.data.error);
             }
@@ -73,8 +72,8 @@ const profileSlice = createSlice({
             state.postData[name] = value;
         },
         setUserPosts: (state, action) => {
+            state.userPosts = [];
             const {posts} = action.payload;
-            console.log(posts);
             state.userPosts.push(...posts);
         },
         setIsPostingOn: (state) => {

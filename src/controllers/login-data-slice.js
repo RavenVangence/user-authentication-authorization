@@ -97,6 +97,7 @@ const loginDataSlice = createSlice({
         })
         builder.addCase(submitLoginForm.rejected, (state, action) => {
             state.isLoading = false
+            state.isUserLoggedIn.status = true;
             state.formError[0] = true;
             state.formError[1] = action.payload;
         })

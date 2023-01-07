@@ -4,10 +4,15 @@ import {FaRegUserCircle, FaRegComment} from 'react-icons/fa';
 import {RiDislikeLine, RiHeartLine, RiShareLine} from 'react-icons/ri'
 import { setPostData, submitPost, setIsPostingOff, setIsPostingOn } from '../controllers/profile-data-slice';
 import { TiTick } from 'react-icons/ti';
+import { setLogIn } from '../controllers/logout-data-slice';
 function UserProfile() {
     const dispatch = useDispatch();
     const {userProfileData, userPosts, isPosting, postData, postError, isLoading, isPostSubmitComplete} = useSelector(store => store.profileSlice);
 
+    useEffect(() => {
+        dispatch(setLogIn())
+    },[])
+    
     return <section className='main-profile-container'>
         
         {

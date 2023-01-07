@@ -15,6 +15,9 @@
     align-items: center;
     pointer-events: none;
 }
+.welcome-board {
+    pointer-events: none;
+}
 .log-container {
     grid-column-start: 3;
     grid-column-end: 4;

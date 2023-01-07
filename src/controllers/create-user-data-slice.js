@@ -93,6 +93,9 @@ const dataSlice = createSlice({
     },
     setIsSubmitComplete: (state) => {
       state.isSubmitComplete = true;
+    },
+    setIsSubmitCompleteOff: (state) => {
+      state.isSubmitComplete = false;
     }
   },
   extraReducers: (builder) => {
@@ -127,6 +130,6 @@ const dataSlice = createSlice({
 // Extract the action creators object and the reducer
 const { actions, reducer } = dataSlice;
 // Extract and export each action creator by name
-export const { setUserLoggedIn, setFormData, setErrorOff, submitCreateUserForm, setIsUserCreatedOff, setIsUserCreatedOn, setIsSubmitComplete} = actions;
+export const { setUserLoggedIn, setFormData, setErrorOff, submitCreateUserForm, setIsUserCreatedOff, setIsUserCreatedOn, setIsSubmitComplete, setIsSubmitCompleteOff} = actions;
 // Export the reducer, either as a default or named export
 export default reducer;

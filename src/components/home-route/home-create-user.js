@@ -164,7 +164,6 @@ const HomeModal = () => {
       const isComplete = await getUsersInfo();
     
         if (isComplete === 'complete') {
-          console.log(1);
           navigate('/locked-routes/profile');
         }
     }
