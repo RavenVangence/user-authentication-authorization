@@ -36,7 +36,7 @@ export const postData = createAsyncThunk('postFormData',
             }
       const res = await axios({
         method: 'post',
-        url: 'http://localhost:8000/user/create-user',
+        url: 'https://user-authentication-authorization.vercel.app/user/create-user',
         data: {
           ...formData
         },

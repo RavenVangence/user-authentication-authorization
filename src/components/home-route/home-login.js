@@ -86,19 +86,19 @@ const LoginModal = () => {
     let res;
       //check if userId is available
       if (userID) {
-        res = await axios.get(`http://localhost:8000/profile/${userID}`,
+        res = await axios.get(`https://user-authentication-authorization.vercel.app/profile/${userID}`,
         {
           withCredentials: true
         })
       } 
       if(!userID && SESSION_LOGIN_ID){
-        res = await axios.get(`http://localhost:8000/profile/${SESSION_LOGIN_ID}`,
+        res = await axios.get(`https://user-authentication-authorization.vercel.app/profile/${SESSION_LOGIN_ID}`,
         {
           withCredentials: true
         });
       }
       if (userID || SESSION_LOGIN_ID) {
-        const response = await axios.get(`http://localhost:8000/user/post-api/my-posts`,
+        const response = await axios.get(`https://user-authentication-authorization.vercel.app/user/post-api/my-posts`,
         {
           withCredentials: true
         });

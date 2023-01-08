@@ -26,7 +26,7 @@ export const submitLoginForm = createAsyncThunk('postLoginForm',
 
             const res = await axios({
                 method: 'post',
-                url: 'http://localhost:8000/user/login',
+                url: 'https://user-authentication-authorization.vercel.app/user/login',
                 data: {
                 ...loginFormData
                 },

@@ -27,7 +27,7 @@ export const submitPost = createAsyncThunk('submitPost',
 
             const res = await axios({
                 method: 'post',
-                url: 'http://localhost:8000/user/post-api/create-post',
+                url: 'https://user-authentication-authorization.vercel.app/user/post-api/create-post',
                 data: {
                     ...postData
                 },

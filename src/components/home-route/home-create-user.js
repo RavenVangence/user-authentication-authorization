@@ -131,13 +131,13 @@ const HomeModal = () => {
       let res;
       //check if userId is available
       if (userID) {
-        res = await axios.get(`http://localhost:8000/profile/${userID}`,
+        res = await axios.get(`https://user-authentication-authorization.vercel.app/profile/${userID}`,
         {
           withCredentials: true
         })
       } 
       if(!userID && SESSION_CREATE_ID){
-        res = await axios.get(`http://localhost:8000/profile/${SESSION_CREATE_ID}`,
+        res = await axios.get(`https://user-authentication-authorization.vercel.app/profile/${SESSION_CREATE_ID}`,
         {
           withCredentials: true
         });
