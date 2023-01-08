@@ -34,8 +34,8 @@ router.post('/create-user', async (req, res) => {
             //sign token
             const token =  jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '2h'});
             //send cookie encased token to front-end
-            res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2});
-            res.cookie('SESSION_CREATE_ID', userID);
+            res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2, secure: true, sameSite: 'none'});
+            res.cookie('SESSION_CREATE_ID', userID, { secure: true, sameSite: 'none'});
             res.status(201).json({message: `User ${username} successfully created!`, userID})
         }
     } catch (error) {
@@ -68,8 +68,8 @@ router.post('/login', async (req, res) => {
 
                 // create new token
                 const token = jwt.sign({user}, process.env.JWT_PRIVATE_KEY, {expiresIn: '2h'});
-                res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2});
-                res.cookie('SESSION_LOGIN_ID', userID);
+                res.cookie('auth_token', token, {maxAge: 1000 * 60 * 60 * 2, secure: true, sameSite: "None"});
+                res.cookie('SESSION_LOGIN_ID', userID, {secure: true, sameSite: "None",});
                 res.status(200).json({message: 'User successfully logged in', userID});
             }
             
