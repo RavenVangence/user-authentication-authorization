@@ -34,9 +34,8 @@ try {
     connectDB();
     mongoose.connection.once('open', () => {
         console.log('connected to DB');
-        app.listen(process.env.PORT || 8000, console.log('listerning on port', 8000));
+        app.listen(process.env.PORT, console.log('listerning on port',process.env.PORT));
     })
-    // app.listen(process.env.PORT || 8000, console.log('listerning on port', 8000));
 } catch (error) {
     console.error(error);
 }
