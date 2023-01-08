@@ -12,7 +12,7 @@ const profileRoute = require('./routes/profile-route.js');
 //APP DOT USE CASES
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: 'https://raven-auth-api.netlify.app',
     credentials: true,
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }));
